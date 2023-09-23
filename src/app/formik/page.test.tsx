@@ -1,5 +1,5 @@
 import React from 'react'
-import FormikPage, { initialValues } from './page'
+import FormikPage from './page'
 import { test, expect, describe } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
