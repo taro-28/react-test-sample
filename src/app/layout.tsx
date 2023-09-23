@@ -11,12 +11,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body>
-        <header className='p-2'>
+        <header className='p-4'>
           <Link className='text-2xl font-bold' href='/'>
             React Form Sample
           </Link>
         </header>
-        <main className='p-4'>{children}</main>
+        <main className='px-4'>{children}</main>
       </body>
     </html>
   )

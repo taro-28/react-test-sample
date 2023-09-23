@@ -6,41 +6,42 @@ import userEvent from '@testing-library/user-event'
 import { typedEntries } from '@/funtions'
 import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
 
-// split test for create and update
+// split test for create and update0
 describe('FormikPage', () => {
-  typedEntries(initialValues).forEach(([name, initialValue]) => {
-    test(`should render ${name} input`, async () => {
-      render(<FormikPage />)
+  test(`should render input`, () => {
+    render(<FormikPage />)
+    typedEntries(initialValues).forEach(async ([name, initialValue]) => {
       const role = inputTypeToRoleMap.get(name)!
-      const getTarget = () => screen.getByRole(inputTypeToRoleMap.get(name)!, { name })
+      const findTarget = () => screen.findByRole(inputTypeToRoleMap.get(name)!, { name })
 
       switch (role) {
         case 'checkbox':
-          expect(getTarget()).not.toBeChecked()
+          expect(await findTarget()).not.toBeChecked()
           break
         default:
-          expect(getTarget()).toHaveValue(initialValue)
+          expect(await findTarget()).toHaveValue(initialValue)
       }
 
-      await userEvent.click(getTarget())
-      expect(getTarget()).toHaveFocus()
+      await userEvent.click(await findTarget())
+      expect(findTarget()).toHaveFocus()
 
       switch (role) {
         case 'slider':
           break
         case 'checkbox':
-          expect(getTarget()).toBeChecked()
+          expect(findTarget()).toBeChecked()
           break
         case 'spinbutton':
-          await userEvent.type(getTarget(), '1')
-          expect(getTarget()).toHaveValue(1)
+          await userEvent.type(await findTarget(), '1')
+          expect(findTarget()).toHaveValue(1)
           break
         default:
-          await userEvent.type(getTarget(), 'Hello World')
-          expect(getTarget()).toHaveValue('Hello World')
+          await userEvent.type(await findTarget(), 'Hello World')
+          expect(findTarget()).toHaveValue('Hello World')
       }
 
       await userEvent.click(screen.getByRole('button', { name: 'submit' }))
+
       // TODO add test for submit
     })
   })

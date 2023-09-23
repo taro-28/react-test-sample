@@ -1,5 +1,5 @@
 'use client'
-import { typedKeys } from '@/funtions'
+import { typedEntries, typedKeys } from '@/funtions'
 import { HTMLInputType } from '@/types'
 import { Field, Formik } from 'formik'
 
@@ -33,18 +33,20 @@ export default function FormikPage() {
       <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)}>
         {({ handleSubmit }) => (
           <form className='flex flex-col space-y-2' onSubmit={handleSubmit}>
-            {typedKeys(initialValues).map((key) => (
+            {typedEntries(initialValues).map(([key]) => (
               <label className='flex items-center font-semibold' key={key}>
                 {key}
                 <Field
                   className='ml-2 rounded-md border border-gray-500 p-1 font-normal'
                   name={key}
                   type={key}
-                  // TODO add placeholder
                 />
               </label>
             ))}
-            <button className='rounded-md border border-gray-500 p-1 hover:text-gray-500'>
+            <button
+              className='rounded-md border border-gray-500 p-1 hover:text-gray-500'
+              type='submit'
+            >
               submit
             </button>
           </form>
