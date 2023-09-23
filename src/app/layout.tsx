@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body>
-        <header>
+        <header className='p-2'>
           <Link className='text-2xl font-bold' href='/'>
             React Form Sample
           </Link>
