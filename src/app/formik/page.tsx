@@ -18,9 +18,7 @@ export default function FormikPage() {
   return (
     <div className='space-y-4'>
       <h1 className='text-3xl font-bold'>Formik Form</h1>
-      <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)}>
-        {(formikProps) => <FormikForm {...formikProps} />}
-      </Formik>
+      <FormikForm initialValues={initialValues} onSubmit={(values) => console.log(values)} />
     </div>
   )
 }

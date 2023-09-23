@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event'
 import { typedEntries } from '@/funtions'
 import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
 import { HTMLInputType } from '@/types'
+import { FormikForm } from './FormikForm'
 
 const initialValues: Partial<Record<HTMLInputType, any>> = {
   text: '',
@@ -33,7 +34,7 @@ const initialValues: Partial<Record<HTMLInputType, any>> = {
 // split test for create and update
 describe('FormikForm', () => {
   test(`should render input`, () => {
-    render(<FormikPage />)
+    render(<FormikForm initialValues={initialValues} onSubmit={() => {}} />)
     typedEntries(initialValues).forEach(async ([name, initialValue]) => {
       const role = inputTypeToRoleMap.get(name)!
       const findTarget = () => screen.findByRole(inputTypeToRoleMap.get(name)!, { name })
