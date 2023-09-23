@@ -1,6 +1,5 @@
 'use client'
 import { HTMLInputType } from '@/types'
-import { Formik } from 'formik'
 import { FormikForm } from './FormikForm'
 
 export default function FormikPage() {

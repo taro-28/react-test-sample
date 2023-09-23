@@ -1,4 +1,4 @@
-import { Field, Form, Formik, FormikConfig, FormikProps } from 'formik'
+import { Field, Form, Formik, FormikConfig } from 'formik'
 import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
 import { HTMLInputType } from '@/types'
 
