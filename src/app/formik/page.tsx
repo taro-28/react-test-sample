@@ -3,30 +3,29 @@ import { typedEntries, typedKeys } from '@/funtions'
 import { HTMLInputType } from '@/types'
 import { Field, Formik } from 'formik'
 
-export const initialValues: Partial<Record<HTMLInputType, any>> = {
-  text: '',
-  number: null,
-  email: '',
-  datetime: '',
-  tel: '',
-  url: '',
-  search: '',
-  range: '0',
-  checkbox: false,
-  // cannot be tested
-  // password: '',
-  // date: '',
-  // time: '',
-  // month: '',
-  // week: '',
-  // color: '',
-  // radio: '',
-  // file: '',
-  // image: '',
-  // 'datetime-local': '',
-}
-
 export default function FormikPage() {
+  const initialValues: Partial<Record<HTMLInputType, any>> = {
+    text: '',
+    number: null,
+    email: '',
+    datetime: '',
+    tel: '',
+    url: '',
+    search: '',
+    range: '0',
+    checkbox: false,
+    // cannot be tested
+    // password: '',
+    // date: '',
+    // time: '',
+    // month: '',
+    // week: '',
+    // color: '',
+    // radio: '',
+    // file: '',
+    // image: '',
+    // 'datetime-local': '',
+  }
   return (
     <div className='space-y-4'>
       <h1 className='text-3xl font-bold'>Formik Form</h1>

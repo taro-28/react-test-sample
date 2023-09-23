@@ -5,6 +5,30 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { typedEntries } from '@/funtions'
 import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
+import { HTMLInputType } from '@/types'
+
+const initialValues: Partial<Record<HTMLInputType, any>> = {
+  text: '',
+  number: null,
+  email: '',
+  datetime: '',
+  tel: '',
+  url: '',
+  search: '',
+  range: '0',
+  checkbox: false,
+  // cannot be tested
+  // password: '',
+  // date: '',
+  // time: '',
+  // month: '',
+  // week: '',
+  // color: '',
+  // radio: '',
+  // file: '',
+  // image: '',
+  // 'datetime-local': '',
+}
 
 // split test for create and update0
 describe('FormikPage', () => {
