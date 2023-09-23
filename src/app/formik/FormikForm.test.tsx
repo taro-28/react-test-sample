@@ -30,8 +30,8 @@ const initialValues: Partial<Record<HTMLInputType, any>> = {
   // 'datetime-local': '',
 }
 
-// split test for create and update0
-describe('FormikPage', () => {
+// split test for create and update
+describe('FormikForm', () => {
   test(`should render input`, () => {
     render(<FormikPage />)
     typedEntries(initialValues).forEach(async ([name, initialValue]) => {
