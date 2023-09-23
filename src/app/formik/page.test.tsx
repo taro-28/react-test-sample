@@ -1,11 +1,12 @@
 import React from 'react'
 import FormikPage, { initialValues } from './page'
-import { test, expect, describe, vi } from 'vitest'
+import { test, expect, describe } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { inputTypeToRoleMap } from '../consts'
 import { typedEntries } from '@/funtions'
+import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
 
+// split test for create and update
 describe('FormikPage', () => {
   typedEntries(initialValues).forEach(([name, initialValue]) => {
     test(`should render ${name} input`, async () => {
@@ -40,6 +41,7 @@ describe('FormikPage', () => {
       }
 
       await userEvent.click(screen.getByRole('button', { name: 'submit' }))
+      // TODO add test for submit
     })
   })
 })
