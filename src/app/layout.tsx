@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import './globals.css'
 import type { Metadata } from 'next'
 
@@ -9,7 +10,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
-      <body className='p-4'>{children}</body>
+      <body>
+        <header>
+          <Link className='text-2xl font-bold' href='/'>
+            React Form Sample
+          </Link>
+        </header>
+        <main className='p-4'>{children}</main>
+      </body>
     </html>
   )
 }

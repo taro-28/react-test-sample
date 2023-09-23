@@ -28,7 +28,7 @@ export const initialValues: Partial<Record<HTMLInputType, any>> = {
 
 export default function FormikPage() {
   return (
-    <main className='space-y-4'>
+    <div className='space-y-4'>
       <h1 className='text-3xl font-bold'>Formik Form</h1>
       <Formik initialValues={initialValues} onSubmit={(values) => console.log(values)}>
         {({ handleSubmit }) => (
@@ -44,10 +44,12 @@ export default function FormikPage() {
                 />
               </label>
             ))}
-            <button className='rounded-md border border-gray-500 p-1'>submit</button>
+            <button className='rounded-md border border-gray-500 p-1 hover:text-gray-500'>
+              submit
+            </button>
           </form>
         )}
       </Formik>
-    </main>
+    </div>
   )
 }
