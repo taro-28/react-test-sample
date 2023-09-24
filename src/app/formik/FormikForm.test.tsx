@@ -39,10 +39,10 @@ describe('FormikForm', () => {
         checkbox: true,
       },
     },
-  ])('$name', ({ initialValues }) => {
+  ])('$name', async ({ initialValues }) => {
     const onSubmitMock = vi.fn()
     render(<FormikForm initialValues={initialValues} onSubmit={onSubmitMock} />)
-    typedEntries(initialValues).forEach(async ([name, initialValue]) => {
+    for (const [name, initialValue] of typedEntries(initialValues)) {
       const role = inputTypeToRoleMap.get(name)!
       switch (role) {
         case 'checkbox':
@@ -62,17 +62,18 @@ describe('FormikForm', () => {
           initialValue ? expected.not.toBeChecked() : expected.toBeChecked()
           break
         case 'spinbutton':
+          await userEvent.clear(screen.getByRole(role, { name }))
           await userEvent.type(screen.getByRole(role, { name }), '1')
           expect(screen.getByRole(role, { name })).toHaveValue(1)
           break
         default:
+          await userEvent.clear(screen.getByRole(role, { name }))
           await userEvent.type(screen.getByRole(role, { name }), 'Hello World')
           expect(screen.getByRole(role, { name })).toHaveValue('Hello World')
       }
-
-      await userEvent.click(screen.getByRole('button', { name: 'submit' }))
-      expect(onSubmitMock.mock.calls.length).toBe(1)
-      // TODO: add test for submit values
-    })
+    }
+    await userEvent.click(screen.getByRole('button', { name: /submit/i }))
+    expect(onSubmitMock).toHaveBeenCalledWith(initialValues)
+    // TODO: add test for submit values
   })
 })
