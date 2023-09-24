@@ -2,9 +2,9 @@ import React, { ComponentPropsWithoutRef } from 'react'
 import { test, expect, describe, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { typedEntries } from '@/funtions'
 import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
 import { FormikForm } from './FormikForm'
+import { typedEntries } from '@/functions/object'
 
 describe('FormikForm', () => {
   test.each<{
