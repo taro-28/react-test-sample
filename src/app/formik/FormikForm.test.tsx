@@ -22,7 +22,7 @@ describe('FormikForm', () => {
         url: '',
         search: '',
         range: '0',
-        checkbox: false,
+        checkbox: 'false',
       },
     },
     {
@@ -36,7 +36,7 @@ describe('FormikForm', () => {
         url: 'https://example.com',
         search: 'test search',
         range: '1',
-        checkbox: true,
+        checkbox: 'false',
       },
     },
   ])('$name', async ({ initialValues }) => {
@@ -45,10 +45,11 @@ describe('FormikForm', () => {
     for (const [name, initialValue] of typedEntries(initialValues)) {
       const role = inputTypeToRoleMap.get(name)!
       switch (role) {
-        case 'checkbox':
+        case 'checkbox': {
           const expected = expect(screen.getByRole(role, { name }))
           initialValue ? expected.toBeChecked() : expected.not.toBeChecked()
           break
+        }
         default:
           expect(screen.getByRole(role, { name })).toHaveValue(initialValue)
       }
@@ -56,11 +57,12 @@ describe('FormikForm', () => {
       switch (role) {
         case 'slider':
           break
-        case 'checkbox':
+        case 'checkbox': {
           await userEvent.click(screen.getByRole(role, { name }))
           const expected = expect(screen.getByRole(role, { name }))
           initialValue ? expected.not.toBeChecked() : expected.toBeChecked()
           break
+        }
         case 'spinbutton':
           await userEvent.clear(screen.getByRole(role, { name }))
           await userEvent.type(screen.getByRole(role, { name }), '1')
