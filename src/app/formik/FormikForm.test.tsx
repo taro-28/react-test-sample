@@ -43,6 +43,7 @@ describe('FormikForm', () => {
     render(<FormikForm initialValues={initialValues} onSubmit={() => {}} />)
     typedEntries(initialValues).forEach(async ([name, initialValue]) => {
       const role = inputTypeToRoleMap.get(name)!
+      // TODO want to change getByRole but not working
       const findTarget = () => screen.findByRole(inputTypeToRoleMap.get(name)!, { name })
 
       switch (role) {
