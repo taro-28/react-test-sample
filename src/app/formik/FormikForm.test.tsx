@@ -44,38 +44,39 @@ describe('FormikForm', () => {
     render(<FormikForm initialValues={initialValues} onSubmit={onSubmitMock} />)
     for (const [name, initialValue] of typedEntries(initialValues)) {
       const role = inputTypeToRoleMap.get(name)!
+      const getField = () => screen.getByRole(role, { name })
       switch (role) {
         case 'checkbox': {
-          const expected = expect(screen.getByRole(role, { name }))
+          const expected = expect(getField())
           initialValue ? expected.toBeChecked() : expected.not.toBeChecked()
           break
         }
         default:
-          expect(screen.getByRole(role, { name })).toHaveValue(initialValue)
+          expect(getField()).toHaveValue(initialValue)
       }
 
       switch (role) {
         case 'slider':
           break
         case 'checkbox': {
-          await userEvent.click(screen.getByRole(role, { name }))
-          const expected = expect(screen.getByRole(role, { name }))
+          await userEvent.click(getField())
+          const expected = expect(getField())
           initialValue ? expected.not.toBeChecked() : expected.toBeChecked()
           break
         }
         case 'spinbutton':
-          await userEvent.clear(screen.getByRole(role, { name }))
-          await userEvent.type(screen.getByRole(role, { name }), '1')
-          expect(screen.getByRole(role, { name })).toHaveValue(1)
+          await userEvent.clear(getField())
+          await userEvent.type(getField(), '1')
+          expect(getField()).toHaveValue(1)
           break
         default:
-          await userEvent.clear(screen.getByRole(role, { name }))
-          await userEvent.type(screen.getByRole(role, { name }), 'Hello World')
-          expect(screen.getByRole(role, { name })).toHaveValue('Hello World')
+          await userEvent.clear(getField())
+          await userEvent.type(getField(), 'Hello World')
+          expect(getField()).toHaveValue('Hello World')
       }
     }
     await userEvent.click(screen.getByRole('button', { name: /submit/i }))
+    // FIXME: onSubmitMock is not called
     expect(onSubmitMock).toHaveBeenCalledWith(initialValues)
-    // TODO: add test for submit values
   })
 })
