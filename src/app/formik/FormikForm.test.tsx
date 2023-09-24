@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef } from 'react'
-import { test, expect, describe } from 'vitest'
+import { test, expect, describe, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { typedEntries } from '@/funtions'
@@ -40,45 +40,40 @@ describe('FormikForm', () => {
       },
     },
   ])('$name', ({ initialValues }) => {
-    render(<FormikForm initialValues={initialValues} onSubmit={() => {}} />)
+    const onSubmitMock = vi.fn()
+    render(<FormikForm initialValues={initialValues} onSubmit={onSubmitMock} />)
     typedEntries(initialValues).forEach(async ([name, initialValue]) => {
       const role = inputTypeToRoleMap.get(name)!
-      // TODO want to change getByRole but not working
-      const findTarget = () => screen.findByRole(inputTypeToRoleMap.get(name)!, { name })
-
       switch (role) {
         case 'checkbox':
-          if (!initialValue) {
-            expect(await findTarget()).not.toBeChecked()
-            break
-          }
-          expect(await findTarget()).toBeChecked()
+          const expected = expect(screen.getByRole(role, { name }))
+          initialValue ? expected.toBeChecked() : expected.not.toBeChecked()
           break
         default:
-          expect(await findTarget()).toHaveValue(initialValue)
+          expect(screen.getByRole(role, { name })).toHaveValue(initialValue)
       }
-
-      await userEvent.click(await findTarget())
-      expect(findTarget()).toHaveFocus()
 
       switch (role) {
         case 'slider':
           break
         case 'checkbox':
-          expect(findTarget()).toBeChecked()
+          await userEvent.click(screen.getByRole(role, { name }))
+          const expected = expect(screen.getByRole(role, { name }))
+          initialValue ? expected.not.toBeChecked() : expected.toBeChecked()
           break
         case 'spinbutton':
-          await userEvent.type(await findTarget(), '1')
-          expect(findTarget()).toHaveValue(1)
+          await userEvent.type(screen.getByRole(role, { name }), '1')
+          expect(screen.getByRole(role, { name })).toHaveValue(1)
           break
         default:
-          await userEvent.type(await findTarget(), 'Hello World')
-          expect(findTarget()).toHaveValue('Hello World')
+          await userEvent.type(screen.getByRole(role, { name }), 'Hello World')
+          expect(screen.getByRole(role, { name })).toHaveValue('Hello World')
       }
 
+      expect(true).toBe(false)
       await userEvent.click(screen.getByRole('button', { name: 'submit' }))
-
-      // TODO add test for submit
+      expect(onSubmitMock.mock.calls.length).toBe(1)
+      expect(onSubmitMock.mock.calls[0][0][name]).toStrictEqual('aaa')
     })
   })
 })
