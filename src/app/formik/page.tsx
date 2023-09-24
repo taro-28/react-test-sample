@@ -1,9 +1,9 @@
 'use client'
-import { HTMLInputType } from '@/types'
 import { FormikForm } from './FormikForm'
+import { ComponentPropsWithoutRef } from 'react'
 
 export default function FormikPage() {
-  const initialValues: Partial<Record<HTMLInputType, string | string[] | number | null>> = {
+  const initialValues: ComponentPropsWithoutRef<typeof FormikForm>['initialValues'] = {
     text: '',
     number: null,
     email: '',

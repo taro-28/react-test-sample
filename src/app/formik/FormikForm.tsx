@@ -3,11 +3,9 @@ import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
 import { HTMLInputType } from '@/types'
 import { FormikRadio } from './FormikRadio'
 
-export const FormikForm = <
-  T extends Partial<Record<HTMLInputType, string | string[] | number | null>>,
->({
-  ...props
-}: FormikConfig<T>) => {
+type FormikFormValues = Partial<Record<HTMLInputType, string | string[] | number | null>>
+
+export const FormikForm = <T extends FormikFormValues>({ ...props }: FormikConfig<T>) => {
   return (
     <Formik {...props}>
       {() => (
