@@ -6,24 +6,36 @@ import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
 import { FormikForm } from './FormikForm'
 import { typedEntries } from '@/functions/object'
 
+type Values = ComponentPropsWithoutRef<typeof FormikForm>['initialValues']
+type TestCase = {
+  name: string
+  initialValues: Values
+  updatedValues: Values
+}
+
 describe('FormikForm', () => {
-  const onSubmitMock = vi.fn()
-  test.each<{
-    name: string
-    initialValues: ComponentPropsWithoutRef<typeof FormikForm>['initialValues']
-  }>([
+  test.each<TestCase>([
     {
       name: 'should render input empty initial values',
       initialValues: {
         text: '',
         number: null,
-        // email: '',
+        email: '',
         datetime: '',
         tel: '',
-        // url: '',
+        url: '',
         search: '',
-        range: '0',
-        checkbox: 'false',
+        checkbox: false,
+      },
+      updatedValues: {
+        text: 'Hello World',
+        number: 1,
+        email: 'test@example',
+        datetime: '2021-01-01T00:00:00',
+        tel: '0123456789',
+        url: 'https://example.com',
+        search: 'test search',
+        checkbox: true,
       },
     },
     {
@@ -31,18 +43,29 @@ describe('FormikForm', () => {
       initialValues: {
         text: 'test',
         number: 1,
-        email: 'test@example.com',
+        email: 'test1@example.com',
         datetime: '2021-01-01T00:00:00',
         tel: '0123456789',
-        url: 'https://example.com',
+        url: 'https://example1.com',
         search: 'test search',
-        range: '1',
-        checkbox: 'false',
+        checkbox: false,
+      },
+      updatedValues: {
+        text: 'Hello World',
+        number: 2,
+        email: 'test2@example',
+        datetime: '2022-01-01T00:00:00',
+        tel: '0234567890',
+        url: 'https://example2.com',
+        search: 'updated test search',
+        checkbox: true,
       },
     },
-  ])('$name', async ({ initialValues }) => {
-    render(<FormikForm initialValues={initialValues} onSubmit={onSubmitMock} />)
+  ])('$name', async ({ initialValues, updatedValues }) => {
+    const onSubmitMock = vi.fn()
+    render(<FormikForm initialValues={initialValues} onSubmit={(values) => onSubmitMock(values)} />)
     for (const [name, initialValue] of typedEntries(initialValues)) {
+      const updatedValue = updatedValues[name]!
       const role = inputTypeToRoleMap.get(name)!
       const getField = () => screen.getByRole(role, { name })
       switch (role) {
@@ -52,6 +75,7 @@ describe('FormikForm', () => {
           break
         }
         default:
+          if (typeof initialValue === 'boolean') throw new Error('boolean is not reachable')
           expect(getField()).toHaveValue(initialValue)
       }
 
@@ -61,23 +85,25 @@ describe('FormikForm', () => {
         case 'checkbox': {
           await userEvent.click(getField())
           const expected = expect(getField())
-          initialValue ? expected.not.toBeChecked() : expected.toBeChecked()
+          updatedValue ? expected.toBeChecked() : expected.not.toBeChecked()
           break
         }
         case 'spinbutton':
           await userEvent.clear(getField())
-          await userEvent.type(getField(), '1')
-          expect(getField()).toHaveValue(1)
+          await userEvent.type(getField(), updatedValue.toString())
+          if (typeof updatedValue === 'boolean') throw new Error('boolean is not reachable')
+          expect(getField()).toHaveValue(updatedValue)
           break
         default:
           await userEvent.clear(getField())
-          await userEvent.type(getField(), 'Hello World')
-          expect(getField()).toHaveValue('Hello World')
+          if (typeof updatedValue !== 'string') throw new Error('only string is reachable')
+          await userEvent.type(getField(), updatedValue)
+          expect(getField()).toHaveValue(updatedValue)
       }
     }
 
     await userEvent.click(screen.getByRole('button', { name: /submit/i }))
-    // FIXME: onSubmitMock is not called
-    expect(onSubmitMock).toHaveBeenCalled()
+    expect(onSubmitMock).toHaveBeenCalledTimes(1)
+    expect(onSubmitMock).toHaveBeenCalledWith(updatedValues)
   })
 })
