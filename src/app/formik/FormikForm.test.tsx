@@ -81,8 +81,6 @@ describe('FormikForm', () => {
       }
 
       switch (role) {
-        case 'slider':
-          break
         case 'checkbox': {
           await userEvent.click(getField())
           const expected = expect(getField())
