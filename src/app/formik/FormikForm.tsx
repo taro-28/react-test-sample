@@ -5,6 +5,7 @@ import { FormikRadio } from './FormikRadio'
 
 type FormikFormValues = Partial<Record<HTMLInputType, string | string[] | number | null | boolean>>
 
+// TODO add dynamical fields
 export const FormikForm = <T extends FormikFormValues>({ ...props }: FormikConfig<T>) => {
   return (
     <Formik {...props}>
