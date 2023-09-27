@@ -20,7 +20,7 @@ describe('FormikForm', () => {
       name: 'should render input empty initial values',
       initialValues: {
         text: '',
-        number: null,
+        number: '',
         email: '',
         datetime: '',
         tel: '',
@@ -75,6 +75,14 @@ describe('FormikForm', () => {
           initialValue ? expected.toBeChecked() : expected.not.toBeChecked()
           break
         }
+        case 'spinbutton':
+          if (initialValue === '') {
+            expect(getField()).toHaveValue(null)
+            break
+          }
+          if (typeof initialValue !== 'number') throw new Error('only number is reachable')
+          expect(getField()).toHaveValue(initialValue)
+          break
         default:
           if (typeof initialValue === 'boolean') throw new Error('boolean is not reachable')
           expect(getField()).toHaveValue(initialValue)

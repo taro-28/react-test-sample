@@ -5,7 +5,7 @@ import { ComponentPropsWithoutRef } from 'react'
 export default function FormikPage() {
   const initialValues: ComponentPropsWithoutRef<typeof FormikForm>['initialValues'] = {
     text: '',
-    number: null,
+    number: '',
     email: '',
     datetime: '',
     tel: '',
