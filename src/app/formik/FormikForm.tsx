@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, Form, Formik, FormikConfig } from 'formik'
-import { inputTypeToRoleMap } from '../consts/inputTypeToRoleMap'
+import { inputTypeToRoleMap } from '../../consts/inputTypeToRoleMap'
 import { HTMLInputType } from '@/types'
 import { FormikRadio } from './FormikRadio'
 
