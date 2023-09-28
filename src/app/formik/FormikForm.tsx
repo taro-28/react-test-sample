@@ -2,32 +2,27 @@ import { ErrorMessage, Field, Form, Formik, FormikConfig } from 'formik'
 import { inputTypeToRoleMap } from '../../consts/inputTypeToRoleMap'
 import { HTMLInputType } from '@/types'
 import { FormikRadio } from './FormikRadio'
+import * as y from 'yup'
+
+const validationSchema = y.object({
+  text: y.string().required('textを入力してください'),
+  number: y.number().required('numberを入力してください'),
+  email: y
+    .string()
+    .email('emailは有効なメールアドレスではありません')
+    .required('emailを入力してください'),
+  datetime: y.date().required('datetimeを入力してください'),
+  tel: y.string().required('telを入力してください'),
+  url: y.string().url('urlは有効なURLではありません').required('urlを入力してください'),
+  search: y.string().required('searchを入力してください'),
+})
 
 type FormikFormValues = Partial<Record<HTMLInputType, string | string[] | number | null | boolean>>
 
 // TODO add dynamical fields
 export const FormikForm = <T extends FormikFormValues>({ ...props }: FormikConfig<T>) => {
   return (
-    <Formik
-      {...props}
-      // validationSchema={y.object<FormikFormValues>(
-      //   Object.fromEntries(
-      //     Array.from(inputTypeToRoleMap.entries()).map(([inputType]) => {
-      //       switch (inputType) {
-      //         case 'email':
-      //           return [inputType, y.string().email().required()]
-      //         case 'url':
-      //           return [inputType, y.string().url().required()]
-      //         case 'number':
-      //           return [inputType, y.number().required()]
-      //         case 'checkbox':
-      //         default:
-      //           return [inputType, y.string().required()]
-      //       }
-      //     }),
-      //   ),
-      // )}
-    >
+    <Formik {...props} validationSchema={validationSchema}>
       {() => (
         <Form className='flex flex-col space-y-2'>
           {Array.from(inputTypeToRoleMap.entries()).map(([inputType]) => {

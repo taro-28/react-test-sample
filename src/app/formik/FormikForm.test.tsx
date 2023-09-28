@@ -65,6 +65,12 @@ describe('FormikForm', () => {
   ])('$name', async ({ initialValues, updatedValues }) => {
     const onSubmitMock = vi.fn()
     render(<FormikForm initialValues={initialValues} onSubmit={(values) => onSubmitMock(values)} />)
+
+    if (initialValues.text === '') {
+      await userEvent.click(screen.getByRole('button', { name: /submit/i }))
+      expect(onSubmitMock).toHaveBeenCalledTimes(0)
+    }
+
     for (const [name, initialValue] of typedEntries(initialValues)) {
       const updatedValue = updatedValues[name]!
       const role = inputTypeToRoleMap.get(name)!
@@ -86,6 +92,36 @@ describe('FormikForm', () => {
         default:
           if (typeof initialValue === 'boolean') throw new Error('boolean is not reachable')
           expect(getField()).toHaveValue(initialValue)
+      }
+
+      if (initialValue === '') {
+        switch (role) {
+          case 'checkbox':
+            break
+          default:
+            expect(screen.getByText(`${name}を入力してください`)).toBeInTheDocument()
+        }
+      }
+
+      switch (name) {
+        case 'email':
+          await userEvent.clear(getField())
+          await userEvent.type(getField(), 'invalid url')
+          expect(getField()).toHaveValue('invalid url')
+          await userEvent.click(screen.getByRole('button', { name: /submit/i }))
+          expect(onSubmitMock).toHaveBeenCalledTimes(0)
+          expect(
+            screen.getByText(`${name}は有効なメールアドレスではありません`),
+          ).toBeInTheDocument()
+          break
+        case 'url':
+          await userEvent.clear(getField())
+          await userEvent.type(getField(), 'invalid url')
+          expect(getField()).toHaveValue('invalid url')
+          await userEvent.click(screen.getByRole('button', { name: /submit/i }))
+          expect(onSubmitMock).toHaveBeenCalledTimes(0)
+          expect(screen.getByText(`${name}は有効なURLではありません`)).toBeInTheDocument()
+          break
       }
 
       switch (role) {
