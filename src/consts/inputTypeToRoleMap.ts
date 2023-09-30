@@ -22,4 +22,5 @@ export const inputTypeToRoleMap = new Map<HTMLInputType, ByRoleMatcher>([
   ['range', 'slider'],
   ['file', 'button'],
   ['image', 'button'],
+  ['select', 'combobox'],
 ])
