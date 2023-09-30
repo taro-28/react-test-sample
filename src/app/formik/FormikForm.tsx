@@ -7,6 +7,7 @@ import { FormikErrorMessage } from './FormikErrorMessage'
 import { Input } from '@/components/Input'
 import { Label } from '@/components/Label'
 import { Button } from '@/components/Button'
+import { FormikSelect } from './FormikSelect'
 
 const validationSchema = y.object(
   Object.fromEntries(
@@ -43,32 +44,51 @@ const validationSchema = y.object(
 
 type FormikFormValues = Partial<Record<HTMLInputType, string | string[] | number | null | boolean>>
 
+const radioOptions = [
+  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'no' },
+]
+
+const selectOptions = [
+  { label: '🍎Apple', value: 'apple' },
+  { label: '🍊Orange', value: 'orange' },
+  { label: '🍌Banana', value: 'banana' },
+]
+
 // TODO add dynamical fields
 // TODO add fetch initial values, loading, fetch error test
 export const FormikForm = <T extends FormikFormValues>({ ...props }: FormikConfig<T>) => {
   return (
     <Formik {...props} validationSchema={validationSchema}>
       {() => (
-        <Form className='flex flex-col space-y-2'>
+        <Form className='w-fit space-y-2'>
           {Array.from(inputTypeToRoleMap.entries()).map(([inputType]) => (
             <div key={inputType}>
-              {(() => {
-                switch (inputType) {
-                  case 'radio':
-                    return <FormikRadio className='flex items-center' name={inputType} />
-                  default:
-                    return (
-                      <Label className='flex items-center'>
-                        {inputType}
-                        <Field as={Input} className='ml-2' name={inputType} type={inputType} />
-                      </Label>
-                    )
-                }
-              })()}
+              <Label className='grid grid-cols-2'>
+                {inputType}
+                {(() => {
+                  switch (inputType) {
+                    case 'radio':
+                      return (
+                        <FormikRadio
+                          className='flex items-center '
+                          name={inputType}
+                          options={radioOptions}
+                        />
+                      )
+                    case 'select':
+                      return <FormikSelect name={inputType} options={selectOptions} />
+                    default:
+                      return <Field as={Input} name={inputType} type={inputType} />
+                  }
+                })()}
+              </Label>
               <FormikErrorMessage name={inputType} />
             </div>
           ))}
-          <Button type='submit'>submit</Button>
+          <Button className='w-full' type='submit'>
+            submit
+          </Button>
         </Form>
       )}
     </Formik>

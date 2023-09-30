@@ -3,21 +3,13 @@ import clsx from 'clsx'
 import { Label } from '@/components/Label'
 
 type Props = {
-  options?: {
+  options: {
     label: string
     value: string
   }[]
 } & JSX.IntrinsicElements['fieldset']
 
-export const FormikRadio = ({
-  name,
-  options = [
-    { label: 'Yes', value: 'yes' },
-    { label: 'No', value: 'no' },
-  ],
-  className,
-  ...props
-}: Props) => (
+export const FormikRadio = ({ name, options, className, ...props }: Props) => (
   <fieldset {...props} className={clsx('space-x-2', className)}>
     {options.map(({ label, value }) => (
       <Label className='flex items-center' key={value}>
