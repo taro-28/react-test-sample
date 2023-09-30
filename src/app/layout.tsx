@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body className='flex min-h-screen flex-col'>
-        <header className='p-4'>
+        <header className='p-4 text-center'>
           <Link className='text-2xl font-bold' href='/'>
             React Form Sample
           </Link>
