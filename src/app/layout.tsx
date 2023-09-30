@@ -10,13 +10,14 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
-      <body>
+      <body className='flex min-h-screen flex-col'>
         <header className='p-4'>
           <Link className='text-2xl font-bold' href='/'>
             React Form Sample
           </Link>
         </header>
-        <main className='px-4'>{children}</main>
+        <main className='flex flex-col items-center px-4'>{children}</main>
+        <footer className='mt-auto p-4 text-center'>React Form Sample</footer>
       </body>
     </html>
   )
