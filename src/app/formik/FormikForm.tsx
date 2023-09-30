@@ -4,22 +4,43 @@ import { HTMLInputType } from '@/types'
 import { FormikRadio } from './FormikRadio'
 import * as y from 'yup'
 
-const validationSchema = y.object({
-  text: y.string().required('textを入力してください'),
-  number: y.number().required('numberを入力してください'),
-  email: y
-    .string()
-    .email('emailは有効なメールアドレスではありません')
-    .required('emailを入力してください'),
-  datetime: y.date().required('datetimeを入力してください'),
-  tel: y.string().required('telを入力してください'),
-  url: y.string().url('urlは有効なURLではありません').required('urlを入力してください'),
-  search: y.string().required('searchを入力してください'),
-})
+const validationSchema = y.object(
+  Object.fromEntries(
+    Array.from(inputTypeToRoleMap.entries()).map(([inputType]) => {
+      const requiredMsg = `${inputType}を入力してください`
+      switch (inputType) {
+        case 'text':
+        case 'tel':
+        case 'search':
+          return [inputType, y.string().required(requiredMsg)]
+        case 'number':
+          return [inputType, y.number().required(requiredMsg)]
+        case 'email':
+          return [
+            inputType,
+            y
+              .string()
+              .email(`${inputType}は有効なメールアドレスではありません`)
+              .required(requiredMsg),
+          ]
+        case 'datetime':
+          return [inputType, y.date().required(requiredMsg)]
+        case 'url':
+          return [
+            inputType,
+            y.string().url(`${inputType}は有効なURLではありません`).required(requiredMsg),
+          ]
+        default:
+          return [inputType, y.mixed()]
+      }
+    }),
+  ),
+)
 
 type FormikFormValues = Partial<Record<HTMLInputType, string | string[] | number | null | boolean>>
 
 // TODO add dynamical fields
+// TODO add fetch initial values, loading, fetch error test
 export const FormikForm = <T extends FormikFormValues>({ ...props }: FormikConfig<T>) => {
   return (
     <Formik {...props} validationSchema={validationSchema}>

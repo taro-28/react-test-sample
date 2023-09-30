@@ -66,10 +66,12 @@ describe('FormikForm', () => {
     const onSubmitMock = vi.fn()
     render(<FormikForm initialValues={initialValues} onSubmit={(values) => onSubmitMock(values)} />)
 
-    if (initialValues.text === '') {
+    const handleSubmitAndCheckCalledTimes = async (times: number) => {
       await userEvent.click(screen.getByRole('button', { name: /submit/i }))
-      expect(onSubmitMock).toHaveBeenCalledTimes(0)
+      expect(onSubmitMock).toHaveBeenCalledTimes(times)
     }
+
+    if (initialValues.text === '') await handleSubmitAndCheckCalledTimes(0)
 
     for (const [name, initialValue] of typedEntries(initialValues)) {
       const updatedValue = updatedValues[name]!
@@ -108,8 +110,7 @@ describe('FormikForm', () => {
           await userEvent.clear(getField())
           await userEvent.type(getField(), 'invalid url')
           expect(getField()).toHaveValue('invalid url')
-          await userEvent.click(screen.getByRole('button', { name: /submit/i }))
-          expect(onSubmitMock).toHaveBeenCalledTimes(0)
+          await handleSubmitAndCheckCalledTimes(0)
           expect(
             screen.getByText(`${name}は有効なメールアドレスではありません`),
           ).toBeInTheDocument()
@@ -118,8 +119,7 @@ describe('FormikForm', () => {
           await userEvent.clear(getField())
           await userEvent.type(getField(), 'invalid url')
           expect(getField()).toHaveValue('invalid url')
-          await userEvent.click(screen.getByRole('button', { name: /submit/i }))
-          expect(onSubmitMock).toHaveBeenCalledTimes(0)
+          await handleSubmitAndCheckCalledTimes(0)
           expect(screen.getByText(`${name}は有効なURLではありません`)).toBeInTheDocument()
           break
       }
@@ -145,8 +145,7 @@ describe('FormikForm', () => {
       }
     }
 
-    await userEvent.click(screen.getByRole('button', { name: /submit/i }))
-    expect(onSubmitMock).toHaveBeenCalledTimes(1)
+    await handleSubmitAndCheckCalledTimes(1)
     expect(onSubmitMock).toHaveBeenCalledWith(updatedValues)
   })
 })
