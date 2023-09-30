@@ -1,5 +1,6 @@
 import { Field } from 'formik'
 import clsx from 'clsx'
+import { Label } from '@/components/Label'
 
 type Props = {
   options?: {
@@ -19,10 +20,10 @@ export const FormikRadio = ({
 }: Props) => (
   <fieldset {...props} className={clsx('space-x-2', className)}>
     {options.map(({ label, value }) => (
-      <label className='flex items-center' key={value}>
+      <Label className='flex items-center' key={value}>
         {label}
         <Field className='ml-1' name={name} type='radio' value={value} />
-      </label>
+      </Label>
     ))}
   </fieldset>
 )

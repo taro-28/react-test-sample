@@ -4,6 +4,9 @@ import { HTMLInputType } from '@/types'
 import { FormikRadio } from './FormikRadio'
 import * as y from 'yup'
 import { FormikErrorMessage } from './FormikErrorMessage'
+import { Input } from '@/components/Input'
+import { Label } from '@/components/Label'
+import { Button } from '@/components/Button'
 
 const validationSchema = y.object(
   Object.fromEntries(
@@ -52,28 +55,20 @@ export const FormikForm = <T extends FormikFormValues>({ ...props }: FormikConfi
               {(() => {
                 switch (inputType) {
                   case 'radio':
-                    return (
-                      <FormikRadio className='flex items-center font-semibold' name={inputType} />
-                    )
+                    return <FormikRadio className='flex items-center' name={inputType} />
                   default:
                     return (
-                      <label className='flex items-center font-semibold'>
+                      <Label className='flex items-center'>
                         {inputType}
-                        <Field
-                          className='ml-2 rounded-md border border-gray-500 p-1 font-normal'
-                          name={inputType}
-                          type={inputType}
-                        />
-                      </label>
+                        <Field as={Input} className='ml-2' name={inputType} type={inputType} />
+                      </Label>
                     )
                 }
               })()}
               <FormikErrorMessage name={inputType} />
             </div>
           ))}
-          <button className='rounded-md border border-gray-500 p-1 hover:text-gray-500'>
-            submit
-          </button>
+          <Button type='submit'>submit</Button>
         </Form>
       )}
     </Formik>
