@@ -1,9 +1,5 @@
-import Link from 'next/link'
+import { Link } from '@/components/Link'
 
 export default function Home() {
-  return (
-    <Link className='text-blue-500 hover:text-blue-300' href='/formik'>
-      Formik Form
-    </Link>
-  )
+  return <Link href='/formik'>Formik Form</Link>
 }
