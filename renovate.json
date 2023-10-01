@@ -1,10 +1,12 @@
 {
   "extends": ["config:base"],
   "dependencyDashboard": false,
+  "prHourlyLimit": 0,
   "packageRules": [
     {
       "updateTypes": ["patch", "minor", "major"],
-      "automerge": true
+      "automerge": true,
+      "platformAutomerge": true
     }
   ]
 }
