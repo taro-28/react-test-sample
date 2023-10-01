@@ -1,5 +1,6 @@
 {
   "extends": ["config:base"],
   "dependencyDashboard": false,
+  "updateTypes": ["patch", "minor", "major"],
   "automerge": true
 }
