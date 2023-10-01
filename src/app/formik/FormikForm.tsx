@@ -64,7 +64,7 @@ export const FormikForm = <T extends FormikFormValues>({ ...props }: FormikConfi
         <Form className='w-fit space-y-2'>
           {Array.from(inputTypeToRoleMap.entries()).map(([inputType]) => (
             <div key={inputType}>
-              <Label className='grid grid-cols-2'>
+              <Label className='grid grid-cols-2 items-center'>
                 {inputType}
                 {(() => {
                   switch (inputType) {
