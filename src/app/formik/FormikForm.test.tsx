@@ -3,7 +3,7 @@ import { test, expect, describe, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { inputTypeToRoleMap } from '../../consts/inputTypeToRoleMap'
-import { FormikForm } from './FormikForm'
+import { FormikForm, selectOptions } from './FormikForm'
 import { typedEntries } from '@/functions/object'
 
 type Values = ComponentPropsWithoutRef<typeof FormikForm>['initialValues']
@@ -27,6 +27,7 @@ describe('FormikForm', () => {
         url: '',
         search: '',
         checkbox: false,
+        select: '',
       },
       updatedValues: {
         text: 'Hello World',
@@ -37,6 +38,7 @@ describe('FormikForm', () => {
         url: 'https://example.com',
         search: 'test search',
         checkbox: true,
+        select: selectOptions[0].value,
       },
     },
     {
@@ -50,6 +52,7 @@ describe('FormikForm', () => {
         url: 'https://example1.com',
         search: 'test search',
         checkbox: false,
+        select: selectOptions[1].value,
       },
       updatedValues: {
         text: 'Hello World',
@@ -60,6 +63,7 @@ describe('FormikForm', () => {
         url: 'https://example2.com',
         search: 'updated test search',
         checkbox: true,
+        select: selectOptions[2].value,
       },
     },
   ])('$name', async ({ initialValues, updatedValues }) => {
@@ -90,6 +94,10 @@ describe('FormikForm', () => {
           }
           if (typeof initialValue !== 'number') throw new Error('only number is reachable')
           expect(getField()).toHaveValue(initialValue)
+          break
+        case 'combobox':
+          if (typeof initialValue === 'boolean') throw new Error('boolean is not reachable')
+          expect(getField()).toHaveValue(initialValue || selectOptions[0].value)
           break
         default:
           if (typeof initialValue === 'boolean') throw new Error('boolean is not reachable')
@@ -135,6 +143,11 @@ describe('FormikForm', () => {
           await userEvent.clear(getField())
           await userEvent.type(getField(), updatedValue.toString())
           if (typeof updatedValue === 'boolean') throw new Error('boolean is not reachable')
+          expect(getField()).toHaveValue(updatedValue)
+          break
+        case 'combobox':
+          if (typeof updatedValue !== 'string') throw new Error('only string is reachable')
+          await userEvent.selectOptions(getField(), updatedValue)
           expect(getField()).toHaveValue(updatedValue)
           break
         default:

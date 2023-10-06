@@ -11,34 +11,32 @@ import { FormikSelect } from './FormikSelect'
 
 const validationSchema = y.object(
   Object.fromEntries(
-    Array.from(inputTypeToRoleMap.entries()).map(([inputType]) => {
-      const requiredMsg = `${inputType}を入力してください`
-      switch (inputType) {
-        case 'text':
-        case 'tel':
-        case 'search':
-          return [inputType, y.string().required(requiredMsg)]
-        case 'number':
-          return [inputType, y.number().required(requiredMsg)]
-        case 'email':
-          return [
-            inputType,
-            y
+    Array.from(inputTypeToRoleMap.entries()).map(([inputType]) => [
+      inputType,
+      (() => {
+        const requiredMsg = `${inputType}を入力してください`
+        switch (inputType) {
+          case 'text':
+          case 'tel':
+          case 'search':
+          case 'select':
+            return y.string().required(requiredMsg)
+          case 'number':
+            return y.number().required(requiredMsg)
+          case 'email':
+            return y
               .string()
               .email(`${inputType}は有効なメールアドレスではありません`)
-              .required(requiredMsg),
-          ]
-        case 'datetime':
-          return [inputType, y.date().required(requiredMsg)]
-        case 'url':
-          return [
-            inputType,
-            y.string().url(`${inputType}は有効なURLではありません`).required(requiredMsg),
-          ]
-        default:
-          return [inputType, y.mixed()]
-      }
-    }),
+              .required(requiredMsg)
+          case 'datetime':
+            return y.date().required(requiredMsg)
+          case 'url':
+            return y.string().url(`${inputType}は有効なURLではありません`).required(requiredMsg)
+          default:
+            return y.mixed()
+        }
+      })(),
+    ]),
   ),
 )
 
@@ -49,7 +47,7 @@ const radioOptions = [
   { label: 'No', value: 'no' },
 ]
 
-const selectOptions = [
+export const selectOptions = [
   { label: '🍎Apple', value: 'apple' },
   { label: '🍊Orange', value: 'orange' },
   { label: '🍌Banana', value: 'banana' },
